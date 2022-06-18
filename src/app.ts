@@ -1,11 +1,37 @@
-import { createServer, IncomingMessage, ServerResponse } from 'http';
+import {createServer, IncomingMessage, ServerResponse} from 'http';
+import getUsersAPI from "./endpoints/getUsersAPI.js";
+import getUserByIdAPI from "./endpoints/getUserByIdAPI.js";
+import createUserAPI from "./endpoints/createUserAPI.js";
+import putUserAPI from "./endpoints/putUserAPI.js";
+import deleteUserAPI from "./endpoints/deleteUserAPI.js";
 
 const port = process.env.PORT || 3000;
 
-const server = createServer((req: IncomingMessage, res: ServerResponse) => {
-  res.statusCode = 200;
-  res.setHeader('Content-Type', 'text/plain');
-  res.end('Hello World');
+const server = createServer(async (req: IncomingMessage, res: ServerResponse) => {
+  const reqURL = req.url?.match(/(?<=\/)[^\/]+/g) || [];
+  res.setHeader('Content-Type', 'application/json');
+
+  if (reqURL[0] === 'api' && reqURL[1] === 'users' && reqURL.length === 2 && req.method === 'GET') {
+    getUsersAPI(res);
+  }
+  else if (reqURL[0] === 'api' && reqURL[1] === 'users' && reqURL.length === 3 && req.method === 'GET') {
+    getUserByIdAPI(res, reqURL[2]);
+  }
+  else if(reqURL[0] === 'api' && reqURL[1] === 'users' && reqURL.length === 2 && req.method === 'POST') {
+    await createUserAPI(req, res);
+  }
+  else if(reqURL[0] === 'api' && reqURL[1] === 'users' && reqURL.length === 3 && req.method === 'PUT') {
+    await putUserAPI(req, res, reqURL[2]);
+  }
+  else if (reqURL[0] === 'api' && reqURL[1] === 'users' && reqURL.length === 3 && req.method === 'DELETE') {
+    deleteUserAPI(res, reqURL[2]);
+  }
+  else {
+    res.setHeader('Content-Type', 'text/html');
+    res.statusCode = 404;
+    res.write("Content not found");
+  }
+  res.end();
 });
 
 server.listen(port, () => {
