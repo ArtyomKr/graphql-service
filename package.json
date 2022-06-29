@@ -9,10 +9,10 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "main": "src/app.ts",
+  "main": "src/index.js",
   "scripts": {
-    "start": "ts-node src/app.ts",
-    "start:dev": "nodemon src/app.ts",
+    "start": "node src/index.js",
+    "start:dev": "nodemon src/index.js",
     "lint": "eslint --ext .js,.ts src",
     "fix": "eslint --ext .js,.ts src --fix"
   },
@@ -37,5 +37,10 @@
     "prettier": "^2.7.1",
     "ts-node": "^10.8.1",
     "typescript": "^4.7.3"
+  },
+  "dependencies": {
+    "apollo-datasource-rest": "^3.6.1",
+    "apollo-server": "^3.9.0",
+    "graphql": "^16.5.0"
   }
 }
