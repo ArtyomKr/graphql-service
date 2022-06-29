@@ -14,7 +14,7 @@ const typeDefs = gql`
     tracks: [Track]
     genres: [Genre]
     image: String
-}
+  }
 `;
 
 export default typeDefs;
